@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>NGANG NGƯỢC — Chúc mừng 20/10</title>
+<style>
+  :root{
+    --bg1:#fff6fa;
+    --bg2:#ffe9f4;
+    --accent:#d92f73;
+    --accent-2:#ff93c2;
+    --muted:#6b3340;
+    --glass: rgba(255,255,255,0.7);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter, "Segoe UI", Roboto, Arial;color:var(--muted);-webkit-font-smoothing:antialiased;}
+  body{
+    background: radial-gradient(800px 400px at 10% 10%, rgba(255,210,235,0.14), transparent),
+                radial-gradient(700px 300px at 90% 90%, rgba(255,240,245,0.10), transparent),
+                linear-gradient(180deg,var(--bg1),var(--bg2));
+    display:flex;align-items:center;justify-content:center;padding:28px;
+  }
+
+  /* Stage */
+  .stage{
+    width:100%;max-width:1100px;background:linear-gradient(180deg, rgba(255,255,255,0.94), rgba(255,250,252,0.96));
+    border-radius:20px;padding:22px;position:relative;overflow:hidden;box-shadow:0 24px 60px rgba(140,50,90,0.10);border:1px solid rgba(217,47,115,0.06);
+  }
+
+  /* Top */
+  .top{display:flex;align-items:center;gap:16px}
+  /* logo box with 20px padding around logo */
+  .logo-wrap{
+    width:110px;height:110px;padding:20px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(217,47,115,0.12);
+    flex-shrink:0;
+  }
+  .logo-wrap img{width:100%;height:100%;object-fit:contain;display:block;filter:drop-shadow(0 6px 10px rgba(0,0,0,0.12));}
+
+  .title{flex:1}
+  .title h1{margin:0;font-size:24px;color:var(--accent);letter-spacing:0.6px}
+  .title p{margin:6px 0 0;color:#744052;font-size:14px}
+
+  .controls{display:flex;gap:8px}
+
+  .btn{
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    color:white;border:0;padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:700;box-shadow:0 8px 20px rgba(217,47,115,0.18)
+  }
+  .btn.ghost{background:transparent;color:var(--accent);border:1px solid rgba(217,47,115,0.08);box-shadow:none}
+
+  /* main */
+  .main{display:flex;gap:18px;margin-top:14px;align-items:stretch;flex-wrap:wrap}
+  .left{flex:1;min-width:320px}
+  .right{width:420px;max-width:44%}
+
+  .card{background:var(--glass);border-radius:14px;padding:16px;border:1px solid rgba(217,47,115,0.04);box-shadow:0 10px 28px rgba(120,50,80,0.04)}
+
+  .greeting h2{margin:0;font-size:20px;color:#b11f62}
+  .greeting p{margin:8px 0 0;color:#6d4450;font-size:14px}
+
+  /* typed lines */
+  .typed-lines{margin-top:12px;min-height:160px;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+  .line{
+    opacity:0; transform:translateY(12px); transition:all .6s cubic-bezier(.2,.9,.2,1);
+    background:linear-gradient(90deg, rgba(255,255,255,0.85), rgba(255,255,255,0.9));
+    padding:10px 14px;border-radius:10px;border:1px solid rgba(217,47,115,0.03);color:#5b3240;width:100%;
+    box-shadow:0 6px 18px rgba(150,60,100,0.03);
+  }
+  .line.show{opacity:1;transform:translateY(0)}
+
+  /* right visual area */
+  .canvas-wrap{position:relative;height:320px;border-radius:12px;overflow:hidden}
+  #bg-canvas{position:absolute;inset:0;width:100%;height:100%}
+  #hearts, #petals{position:absolute;inset:0;pointer-events:none;z-index:8}
+  .visualizer{position:absolute;left:16px;bottom:16px;height:210px;display:flex;gap:12px;align-items:flex-end;z-index:20}
+  .bar{width:10px;background:linear-gradient(180deg, rgba(255,111,150,0.95), rgba(217,47,115,0.9));border-radius:5px;opacity:0.95;transform-origin:bottom center;transition:height 0.08s linear;}
+
+  /* footer share */
+  .footer{display:flex;align-items:center;justify-content:space-between;margin-top:16px;gap:12px;flex-wrap:wrap}
+  .small{font-size:13px;color:#7b4761}
+  .share-row{display:flex;gap:10px;align-items:center}
+
+  .share-btn{
+    display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;text-decoration:none;border:1px solid rgba(0,0,0,0.04);
+    background:rgba(255,255,255,0.85);color:var(--accent);font-weight:700;cursor:pointer;transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .share-btn:hover{transform:translateY(-4px);box-shadow:0 8px 20px rgba(217,47,115,0.12)}
+
+  .tooltip{position:fixed;left:50%;transform:translateX(-50%);bottom:28px;background:#222;color:#fff;padding:8px 12px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .2s}
+  .tooltip.show{opacity:0.96;pointer-events:auto}
+
+  @media (max-width:920px){
+    .main{flex-direction:column}
+    .right{width:100%}
+    .logo-wrap{width:88px;height:88px;padding:20px}
+  }
+</style>
+</head>
+<body>
+  <div class="stage" id="stage">
+    <div class="top">
+      <div class="logo-wrap" id="logoWrap">
+        <img src="NGANG NGƯỢC trắng (1).png" alt="Logo NGANG NGƯỢC" id="logoImg">
+      </div>
+
+      <div class="title">
+        <h1>NGANG NGƯỢC — Chúc mừng 20/10</h1>
+        <p>Chúc các chị em nhóm NGANG NGƯỢC luôn rạng rỡ, cá tính và tràn đầy sức sống.</p>
+      </div>
+
+      <div class="controls">
+        <button class="btn" id="playBtn">▶ Phát nhạc</button>
+        <button class="btn ghost" id="pauseBtn">⏸ Dừng</button>
+        <button class="btn ghost" id="downloadBtn">⬇ Tải thiệp</button>
+      </div>
+
+    </div>
+
+    <div class="main">
+      <div class="left">
+        <div class="card greeting">
+          <h2> Xin gửi lời chúc tới chị em NGANG NGƯỢC</h2>
+          <p>Những dòng sau xuất hiện nhẹ nhàng theo giai điệu — như một thiệp âm nhạc dành tặng các bạn.</p>
+
+          <div class="typed-lines" id="typedLines"></div>
+
+          <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn" id="wishBtn">✨ NGANG NGƯỢC</button>
+            <button class="btn ghost" id="muteBtn">Tắt/ Bật âm</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="right">
+        <div class="card canvas-wrap">
+          <canvas id="bg-canvas"></canvas>
+          <div id="hearts"></div>
+          <div id="petals"></div>
+          <div class="visualizer" id="visualizer"></div>
+          <!-- YouTube iframe (hidden visually) -->
+          <div id="ytPlayer" style="position:absolute;left:-9999px;top:-9999px;visibility:hidden"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="small">Made with ❤ — Dành tặng chị em NGANG NGƯỢC</div>
+      <div class="share-row">
+        <button class="share-btn" id="shareInstagram"> Instagram</button>
+        <a class="share-btn" id="shareFacebook" target="_blank" rel="noopener"> Facebook</a>
+        <a class="share-btn" id="shareTelegram" target="_blank" rel="noopener"> Telegram</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="tooltip" id="tooltip">Link đã sao chép</div>
+
+  <!-- YouTube IFrame API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script>
+  /***** Content & setup *****/
+  // Lời chúc (nhiều dòng)
+  const lines = [
+    'Có những đóa hoa không cần khoe sắc, nhưng vẫn khiến đời thêm rực rỡ.',
+    'Có những người phụ nữ không cần dịu dàng, vì chính sự “ngang ngược” của họ làm nên nét duyên riêng.',
+    'Cảm ơn các chị em NGANG NGƯỢC — đã cùng nhau cười, cùng nhau “ngược”, và làm cho mỗi ngày thật đặc biệt.',
+    'Chúc các chị em luôn xinh đẹp, tự tin và hạnh phúc như chính giai điệu Váy Hoa Nhí đang ngân vang.',
+    'Chúc mừng ngày phụ nữ Việt Nam - 20/10 💖'
+  ];
+
+  // chèn lines lên DOM
+  const typedLinesEl = document.getElementById('typedLines');
+  lines.forEach((txt,i)=>{
+    const d = document.createElement('div');
+    d.className='line';
+    d.dataset.index = i;
+    d.textContent = txt;
+    typedLinesEl.appendChild(d);
+  });
+
+  /* ===== YouTube player (background audio) ===== */
+  // video id from your link: MrJowBhEyjg
+  let youtubePlayer;
+  function onYouTubeIframeAPIReady() {
+    youtubePlayer = new YT.Player('ytPlayer', {
+      height: '0', width: '0', videoId: 'MrJowBhEyjg',
+      playerVars: {
+        autoplay: 1,
+        controls: 0,
+        loop: 1,
+        playlist: 'MrJowBhEyjg',
+        modestbranding: 1,
+        rel: 0,
+        showinfo: 0,
+        mute: 1 // start muted (browsers might block autoplay with sound)
+      },
+      events: {
+        'onReady': function(e){
+          try { e.target.playVideo(); } catch(e){}
+        },
+        'onStateChange': function(e){
+          // when playing, schedule reveals if not already
+        }
+      }
+    });
+  }
+
+  // play/pause controls
+  const playBtn = document.getElementById('playBtn');
+  const pauseBtn = document.getElementById('pauseBtn');
+  const muteBtn = document.getElementById('muteBtn');
+  playBtn.addEventListener('click', ()=> {
+    if(youtubePlayer) { youtubePlayer.playVideo(); youtubePlayer.unMute(); }
+    startRevealByTimer(); initVisuals(); tooltipHide();
+  });
+  pauseBtn.addEventListener('click', ()=> { if(youtubePlayer) youtubePlayer.pauseVideo(); });
+  muteBtn.addEventListener('click', ()=> {
+    if(!youtubePlayer) return;
+    if(youtubePlayer.isMuted()) { youtubePlayer.unMute(); muteBtn.textContent='Tắt/ Bật âm'; }
+    else { youtubePlayer.mute(); muteBtn.textContent='Bật/ Tắt âm'; }
+  });
+
+  /* ===== Reveal lines timed & beat-trigger simulation ===== */
+  let revealTimers = [];
+  function clearRevealTimers(){ revealTimers.forEach(id=>clearTimeout(id)); revealTimers=[]; }
+  function startRevealByTimer(){
+    clearRevealTimers();
+    // approximate duration - we'll try to get duration via API; fallback to 30s
+    let dur = 30;
+    try {
+      const ytDur = youtubePlayer.getDuration();
+      if(ytDur && !isNaN(ytDur)) dur = ytDur;
+    } catch(e){}
+    const base = Math.max(2, dur / (lines.length + 1));
+    lines.forEach((_,i)=>{
+      const t = Math.round((i+1) * base * 1000);
+      revealTimers.push(setTimeout(()=> revealLine(i), t));
+    });
+  }
+  function revealLine(i){
+    const el = typedLinesEl.querySelector('.line[data-index="'+i+'"]');
+    if(el) el.classList.add('show');
+  }
+
+  // Also allow revealing by simulated beat spikes (we simulate energy with sine wave + randomness)
+  let beatTickInterval;
+  function startBeatListener(){
+    stopBeatListener();
+    beatTickInterval = setInterval(()=> {
+      // simulate beat metric between 0-100
+      const t = performance.now()/800;
+      const energy = 45 + 40*Math.abs(Math.sin(t)) + (Math.random()*20-10);
+      if(energy > 85){
+        const hidden = Array.from(document.querySelectorAll('.line')).filter(n => !n.classList.contains('show'));
+        if(hidden.length) hidden[0].classList.add('show');
+        // spawn petals/hearts on big beats
+        spawnHeartBurst(2);
+      }
+    }, 260);
+  }
+  function stopBeatListener(){ if(beatTickInterval) clearInterval(beatTickInterval); }
+
+  // Start reveal when user clicks Play or clicks Wish
+  document.getElementById('wishBtn').addEventListener('click', ()=>{
+    // reveal all quickly
+    const hidden = Array.from(document.querySelectorAll('.line')).filter(n=>!n.classList.contains('show'));
+    hidden.forEach((el,idx)=> setTimeout(()=> el.classList.add('show'), idx*140));
+    spawnHeartBurst(12);
+  });
+
+  /* ===== Canvas background: soft glows ===== */
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  function resizeCanvas(){ canvas.width = canvas.offsetWidth * devicePixelRatio; canvas.height = canvas.offsetHeight * devicePixelRatio; ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0); drawBg(); }
+  window.addEventListener('resize', resizeCanvas);
+  function drawBg(){
+    const w = canvas.width/devicePixelRatio, h = canvas.height/devicePixelRatio;
+    ctx.clearRect(0,0,w,h);
+    const g = ctx.createLinearGradient(0,0,w,h);
+    g.addColorStop(0, 'rgba(255,250,253,0.95)');
+    g.addColorStop(1, 'rgba(255,240,247,0.95)');
+    ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
+
+    // gentle circles
+    for(let i=0;i<5;i++){
+      const rx = w * (0.15 + i*0.16);
+      const ry = h * (0.2 + (i%2)*0.22);
+      const r = Math.max(w,h) * (0.12 + (i%3)*0.06);
+      const gl = ctx.createRadialGradient(rx,ry,0, rx,ry,r);
+      gl.addColorStop(0, `rgba(255,200,230,${0.05 + (i*0.02)})`);
+      gl.addColorStop(1, 'rgba(255,200,230,0)');
+      ctx.fillStyle = gl; ctx.beginPath(); ctx.arc(rx,ry,r,0,Math.PI*2); ctx.fill();
+    }
+  }
+  resizeCanvas();
+
+  /* ===== Petals system (soft) ===== */
+  const petalsContainer = document.getElementById('petals');
+  function rand(min,max){ return Math.random()*(max-min)+min; }
+  function spawnPetal(count=1){
+    for(let k=0;k<count;k++){
+      const p = document.createElement('div');
+      p.className='petal';
+      const size = rand(10,22);
+      p.style.position='absolute';
+      p.style.left = rand(-6,106) + '%';
+      p.style.top = '-8%';
+      p.style.width = size + 'px';
+      p.style.height = size + 'px';
+      p.style.borderRadius = '50%';
+      p.style.opacity = 0.9;
+      p.style.transform = `rotate(${rand(0,360)}deg)`;
+      p.style.background = `linear-gradient(180deg, hsl(${rand(320,345)},80%,86%), hsl(${rand(300,335)},80%,78%))`;
+      p.style.filter = 'drop-shadow(0 6px 10px rgba(190,80,120,0.12))';
+      p.style.zIndex = 8;
+      petalsContainer.appendChild(p);
+
+      const duration = rand(6000,12000);
+      const endX = (parseFloat(p.style.left) + rand(-18,18));
+      p.animate([
+        { transform: `translateY(0) rotate(${rand(0,360)}deg)`, left: p.style.left, opacity:1 },
+        { transform: `translateY(115vh) rotate(${rand(720,1080)}deg)`, left: `${endX}%`, opacity:0.04 }
+      ], { duration: duration, easing:'cubic-bezier(.2,.8,.2,1)' });
+
+      setTimeout(()=>{ try{ p.remove(); }catch(e){} }, duration+200);
+    }
+  }
+  setInterval(()=> spawnPetal(), 1400);
+
+  /* ===== Hearts continuous system ===== */
+  const heartsContainer = document.getElementById('hearts');
+  function spawnHeart(opts = {}) {
+    const h = document.createElement('div');
+    const size = opts.size || rand(18,46);
+    h.style.position='absolute';
+    const left = rand(6,92);
+    h.style.left = left + '%';
+    h.style.top = '100%';
+    h.style.width = size + 'px';
+    h.style.height = size + 'px';
+    h.style.pointerEvents = 'none';
+    h.style.zIndex = 9;
+    // heart SVG via innerHTML
+    const color = opts.color || `hsl(${rand(320,345)}deg 80% 75%)`;
+    h.innerHTML = `<svg viewBox="0 0 24 24" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg"><path d="M12 21s-7-4.5-9-7.5C1.2 11.4 4 7 8 7c2.3 0 3.1 1.5 4 1.5s1.7-1.5 4-1.5c4 0 6.8 4.4 5 6.5C19 16.5 12 21 12 21z" fill="${color}" opacity="0.95"/></svg>`;
+    heartsContainer.appendChild(h);
+
+    const duration = opts.duration || rand(6000,12000);
+    const endX = left + rand(-18,18);
+    const keyframes = [
+      { transform: 'translateY(0) scale(1)', opacity: 1 },
+      { transform: `translateY(-120vh) scale(${rand(0.7,1.1)})`, opacity: 0.06 }
+    ];
+    const anim = h.animate(keyframes, { duration: duration, easing: 'cubic-bezier(.2,.8,.2,1)' });
+    anim.onfinish = ()=> { try{ h.remove(); }catch(e){} };
+  }
+
+  function spawnHeartBurst(n=6){
+    for(let i=0;i<n;i++){
+      setTimeout(()=> spawnHeart({ size: rand(18,36) }), i*80);
+    }
+  }
+  // continuous gentle hearts
+  setInterval(()=> spawnHeart({ size: rand(16,26) }), 900);
+
+  /* ===== Visualizer (simulated reactive) ===== */
+  const viz = document.getElementById('visualizer');
+  for(let i=0;i<18;i++){ const b=document.createElement('div'); b.className='bar'; b.style.height='8px'; viz.appendChild(b); }
+  function animateVisualizer(){
+    const bars = Array.from(viz.children);
+    requestAnimationFrame(animateVisualizer);
+    const t = performance.now()/300;
+    bars.forEach((b,i)=>{
+      // simulated amplitude by sin + random
+      const v = Math.max(0, Math.sin(t + i*0.3) * 0.6 + Math.random()*0.4);
+      b.style.height = Math.max(6, Math.round(v*72)) + 'px';
+      b.style.opacity = 0.4 + v*0.6;
+    });
+  }
+  animateVisualizer();
+
+  /* ===== Download snapshot (thiệp) ===== */
+document.getElementById('downloadBtn').addEventListener('click', () => {
+  // Đường dẫn đến hình thiệp
+  const imagePath = 'THIỆP.png';
+
+  // Tạo thẻ <a> ẩn để tải file
+  const link = document.createElement('a');
+  link.href = imagePath;
+  link.download = 'Thiep-20-10-NGANG-NGUOC.png'; // tên file khi tải về
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+});
+</script>
+
+<!-- CSS -->
+<style>
+.download-btn {
+  background: linear-gradient(90deg, #ff77aa, #ff99cc);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(255, 105, 180, 0.3);
+  transition: transform 0.2s ease;
+}
+
+.download-btn:hover {
+  transform: scale(1.05);
+  background: linear-gradient(90deg, #ff99cc, #ff77aa);
+}
+</style>
+
+<!-- JavaScript -->
+<script>
+function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  const words = text.split(' ');
+  let line = '';
+  for (let n = 0; n < words.length; n++) {
+    const testLine = line + words[n] + ' ';
+    const metrics = ctx.measureText(testLine);
+    const testWidth = metrics.width;
+    if (testWidth > maxWidth && n > 0) {
+      ctx.fillText(line, x, y);
+      line = words[n] + ' ';
+      y += lineHeight;
+    } else {
+      line = testLine;
+    }
+  }
+  ctx.fillText(line, x, y);
+}
+
+/* ===== Sharing buttons ===== */
+const pageUrl = location.href;
+const shareTitle = encodeURIComponent('Chúc mừng 20/10 - NGANG NGƯỢC');
+const shareText = encodeURIComponent('Chúc mừng 20/10! Gửi lời chúc tới NGANG NGƯỢC 🌸');
+document.getElementById('shareFacebook').href =
+  `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pageUrl)}&t=${shareTitle}`;
+document.getElementById('shareTelegram').href =
+  `https://t.me/share/url?url=${encodeURIComponent(pageUrl)}&text=${shareText}`;
+
+const igBtn = document.getElementById('shareInstagram');
+const tooltip = document.getElementById('tooltip');
+
+igBtn.addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(pageUrl);
+    tooltip.textContent = 'Link đã sao chép — mở Instagram và dán link vào trạng thái hoặc tin.';
+    tooltip.classList.add('show');
+    setTimeout(() => tooltip.classList.remove('show'), 2400);
+    window.open('https://www.instagram.com/', '_blank');
+  } catch (e) {
+    alert('Không thể sao chép tự động. Vui lòng copy link từ thanh địa chỉ để chia sẻ lên Instagram.');
+  }
+});
+
+function tooltipHide() {
+  tooltip.classList.remove('show');
+}
+
+/* ===== Start visuals when user interacts (ensure autoplay compatibility) ===== */
+function initVisuals() {
+  startRevealByTimer();
+  startBeatListener();
+}
+
+// On first user interaction, unmute YouTube for autoplay policy
+['click', 'touchstart', 'keydown'].forEach(evt => {
+  document.addEventListener(evt, function once() {
+    try {
+      if (youtubePlayer) {
+        youtubePlayer.unMute();
+      }
+    } catch (e) {}
+    initVisuals();
+    document.removeEventListener(evt, once);
+  });
+});
+
+// Try autoplay at load (likely muted)
+setTimeout(() => {
+  try {
+    if (youtubePlayer) youtubePlayer.playVideo();
+  } catch (e) {}
+}, 600);
+
+</script>
+</body>
+</html>
