@@ -96,6 +96,116 @@
     .right{width:100%}
     .logo-wrap{width:88px;height:88px;padding:20px}
   }
+  /* Responsive cải tiến cho tablet và mobile */
+@media (max-width: 1024px) {
+  .stage {
+    padding: 16px;
+  }
+
+  .top {
+    flex-wrap: wrap;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .logo-wrap {
+    width: 80px;
+    height: 80px;
+    padding: 14px;
+  }
+
+  .title h1 {
+    font-size: 20px;
+  }
+
+  .title p {
+    font-size: 13px;
+  }
+
+  .controls {
+    width: 100%;
+    justify-content: center;
+    margin-top: 8px;
+  }
+
+  .main {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .left, .right {
+    width: 100%;
+    min-width: unset;
+    max-width: 100%;
+  }
+
+  .canvas-wrap {
+    height: 240px;
+  }
+
+  .visualizer {
+    height: 160px;
+    left: 8px;
+    bottom: 8px;
+  }
+
+  .bar {
+    width: 8px;
+  }
+
+  .btn {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 12px;
+  }
+
+  .stage {
+    border-radius: 14px;
+  }
+
+  .logo-wrap {
+    width: 64px;
+    height: 64px;
+  }
+
+  .title h1 {
+    font-size: 18px;
+  }
+
+  .title p {
+    font-size: 12px;
+  }
+
+  .greeting h2 {
+    font-size: 17px;
+  }
+
+  .typed-lines {
+    min-height: 120px;
+  }
+
+  .footer {
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+  }
+
+  .share-row {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .share-btn {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -490,6 +600,9 @@ setTimeout(() => {
     if (youtubePlayer) youtubePlayer.playVideo();
   } catch (e) {}
 }, 600);
+if (window.innerWidth < 768) {
+  clearInterval(petalInterval);
+}
 
 </script>
 </body>
